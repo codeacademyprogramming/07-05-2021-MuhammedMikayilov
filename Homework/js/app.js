@@ -255,7 +255,7 @@ const searchForName = ()=> {
         users.map((item, key)=> {
             if(item.name.toLowerCase().includes(searchInput.value.toLowerCase()) || item.surname.toLowerCase().includes(searchInput.value.toLowerCase())){
                 document.querySelector(`.trow-${item.name}`).classList.add("w-100")
-            document.querySelector(".error-message").classList.remove("d-none");
+            document.querySelector(".error-message").classList.add("d-none");
                 return document.querySelector(`.trow-${item.name}`).classList.remove("d-none");
             }
         })
