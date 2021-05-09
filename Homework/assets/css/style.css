@@ -18,3 +18,7 @@
   height: 60vh;
   background-color: #fff;
 }
+
+.btn:focus {
+  box-shadow: none;
+}
