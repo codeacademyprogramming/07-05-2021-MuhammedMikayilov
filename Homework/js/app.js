@@ -4,6 +4,7 @@ let popup = document.querySelector(".popup");
 let modal = document.querySelector(".popup .user-table-modal");
 let searchInput = document.querySelector("#search");
 let icon = document.querySelector(".cursor i");
+let filterByLoan = document.querySelector("input[name='checkbox']")
 
 // ____________________________________________________________________________________
 
@@ -22,12 +23,70 @@ const Main = async () => {
   let response = await fetch("./js/data.json");
   let fetched = await response.json();
   let isClosed = false;
+
+
+  filterByLoan.addEventListener("click", (e)=> {
+
+      if(!e.target.classList.contains("checked")){
+        e.target.classList.add("checked")
+      }
+      else
+      e.target.classList.remove("checked")
+      
+
+      if(e.target.classList.contains("checked")){
+        filterActive()
+      }
+      else {
+        fetched.forEach((item, key) => {
+            users.push(item)
+          //   checkPercent(item)
+            userTable.innerHTML += `
+              <tr>
+                  <td>
+                      <figure>
+                          <img src="${item.img}" alt="Image" width=50>
+                      </figure>
+                  </td>
+                  <td>${item.name}</td>
+                  <td>${item.surname}</td>
+                  <td>${item.salary.value + " " + item.salary.currency}</td>
+                  <td>${isActiveLoan(item)}</td>
+                  <td>${totalPay(item)}</td>
+                  <td>${checkPercent(item)}</td>
+                  <td><button type="button" data-id="${key}" class="btn btn-success detailBtn">Show Details</button></td>
+              </tr>
+          `;
+      
+          document.querySelector(".cursor .fa-sort-alpha-down").addEventListener("click", ()=> {
+              if(icon.classList.contains("fa-sort-alpha-down")){
+                  sortedList()
+                  icon.remove()
+                  // icon.classList.add("fa-sort-alpha-up")
+              }
+          })
+      
+      
+          document.querySelectorAll(".detailBtn").forEach((userBtn, index) => {
+            userBtn.addEventListener("click", () => {
+              popup.style.visibility = "visible";
+              popup.style.opacity = "1";
+              popup.style.transition = "all 0.5s";
+              modal.classList.add("animate__fadeInDown");
+              modalTable(index)
+            });
+          });
+        });
+      }
+      
+  })
+  searchForName()
   
   fetched.forEach((item, key) => {
       users.push(item)
     //   checkPercent(item)
       userTable.innerHTML += `
-        <tr>
+        <tr class="trow-main trow-${item.name}">
             <td>
                 <figure>
                     <img src="${item.img}" alt="Image" width=50>
@@ -36,6 +95,7 @@ const Main = async () => {
             <td>${item.name}</td>
             <td>${item.surname}</td>
             <td>${item.salary.value + " " + item.salary.currency}</td>
+            <td>${isActiveLoan(item)}</td>
             <td>${totalPay(item)}</td>
             <td>${checkPercent(item)}</td>
             <td><button type="button" data-id="${key}" class="btn btn-success detailBtn">Show Details</button></td>
@@ -95,6 +155,7 @@ const sortedList = ()=> {
             <td>${item.name}</td>
             <td>${item.surname}</td>
             <td>${item.salary.value + " " + item.salary.currency}</td>
+            <td>${isActiveLoan(item)}</td>
             <td>${totalPay(item)}</td>
             <td>${checkPercent(item)}</td>
             <td><button type="button" class="btn btn-success detailBtn">Show Details</button></td>
@@ -148,6 +209,34 @@ const totalPay = (item)=> {
     return result + ` ${item.loans[0].perMonth.currency}`;
 }
 
+const isActiveLoan = (item) => {
+    let isActive = false;
+    for (let i = 0; i < item.loans.length; i++) {
+        if(!item.loans[i].closed) {
+            isActive = true;
+            return "Yes";
+        }
+    }
+
+    return "No"
+}
+
+const filterActive = ()=> {
+   users.forEach((item, key)=> {
+    console.log("itemmmm: ", item);
+    let newArr = [];
+
+    item.loans.forEach((loan, ind)=>{
+        if(loan.closed){
+            console.log("tr");
+            userTable.innerHTML = ""
+            newArr.push(item)
+            console.log(newArr);
+        }
+    })
+   })
+}
+
 const sortedListZtoA = ()=> {
     users.sort(function(a, b){
       if(a.name < b.name) { return 1; }
@@ -157,12 +246,26 @@ const sortedListZtoA = ()=> {
 
   console.log("us", users);
     userTable.innerHTML = ``;
-    // document.querySelector(".cursor .fa-sort-alpha-up").addEventListener("click", ()=> {
-    //     if(icon.classList.contains("fa-sort-alpha-up")){
-    //         icon.classList.remove("fa-sort-alpha-up")
-    //         icon.classList.add("fa-sort-alpha-down")
-    //     }
-    // })
+}
+
+const searchForName = ()=> {
+    document.querySelector("#form").addEventListener("submit", (e)=> {
+        e.preventDefault();
+        let userSearched = [];
+        document.querySelectorAll(".trow-main").forEach(trow=>trow.classList.add("d-none"))
+        users.map((item, key)=> {
+            // document.querySelectorAll(".trow-main").forEach(trow=>trow.style.display = "none")
+            // if(item.name.includes(searchInput.value) || item.surname.includes(searchInput.value)){
+            //    return document.querySelectorAll(`.trow-${item.name}`).forEach(tname=>tname.style.display="block")
+            // }
+            
+            if(item.name.includes(searchInput.value) || item.surname.includes(searchInput.value)){
+                console.log(document.querySelector(`.trow-${item.name}`).classList);
+                document.querySelector(`.trow-${item.name}`).classList.add("w-100")
+                return document.querySelector(`.trow-${item.name}`).classList.remove("d-none");
+            }
+        })
+    })
 }
 
 const modalTable = (key)=>{
