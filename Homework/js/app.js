@@ -157,11 +157,17 @@ const totalPay = (item)=> {
     let dueAmount = 0;
     calc = item.salary.value * 45 / 100;
     
-    for (let i = 0; i < item.loans.length; i++) {
-        result += item.loans[i].perMonth.value
-    }
+    // for (let i = 0; i < item.loans.length; i++) {
+    //     result += item.loans[i].perMonth.value
+    // }
 
-    return result + ` ${item.loans[0].perMonth.currency}`;
+    result = item.loans.reduce((calculate, itemSalary)=>(
+      calculate = calculate + itemSalary?.perMonth?.value
+    ), 0)
+
+    // console.log("res", result);
+    return result + ' AZN';
+    // return result + ` ${item.loans[0].perMonth.currency}`;
 }
 
 const isActiveLoan = (item) => {
