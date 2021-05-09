@@ -5,26 +5,6 @@
     "name": "Jesus",
     "loans": [
       {
-        "amount": { "value": 22000, "currency": "AZN" },
-        "closed": false,
-        "loaner": "Bank of Trauny",
-        "period": { "type": "month", "value": 36 },
-        "perMonth": { "value": 1011.11, "currency": "AZN" },
-        "dueAmount": { "value": 4200, "currency": "AZN" },
-        "loanPeriod": { "end": "22.01.2022", "start": "22.01.2019" },
-        "interestRate": 18
-      },
-      {
-        "amount": { "value": 5000, "currency": "AZN" },
-        "closed": false,
-        "loaner": "TBC",
-        "period": { "type": "month", "value": 12 },
-        "perMonth": { "value": 1016.66, "currency": "AZN" },
-        "dueAmount": { "value": 2916, "currency": "AZN" },
-        "loanPeriod": { "end": "03.01.2022", "start": "03.01.2021" },
-        "interestRate": 22
-      },
-      {
         "amount": { "value": 8500, "currency": "AZN" },
         "closed": true,
         "loaner": "Revolut",
@@ -120,6 +100,28 @@
     ],
     "salary": { "value": 5500, "currency": "AZN" },
     "surname": "Mikayilov",
+    "hasSalaryCard": true,
+    "hasLoanHistory": true
+  },
+
+  {
+    "id": 1,
+    "img": "https://randomuser.me/api/portraits/men/42.jpg",
+    "name": "Jack",
+    "loans": [
+      {
+        "amount": { "value": 30000, "currency": "AZN" },
+        "closed": false,
+        "loaner": "Revolut",
+        "period": { "type": "month", "value": 24 },
+        "dueAmount": { "value": 30000, "currency": "AZN" },
+        "perMonth": { "value": 2500, "currency": "AZN" },
+        "loanPeriod": { "end": "09.05.2022", "start": "09.05.2021" },
+        "interestRate": 19
+      }
+    ],
+    "salary": { "value": 4000, "currency": "AZN" },
+    "surname": "Dalson",
     "hasSalaryCard": true,
     "hasLoanHistory": true
   }
