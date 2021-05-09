@@ -1,4 +1,4 @@
-.popup {
+.popup, .popup-user {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -10,7 +10,7 @@
   opacity: 0;
 }
 
-.popup .modal-user {
+.popup .modal-user, .popup-user .modal-user {
   position: absolute;
   left: 5vw;
   top: 20vh;

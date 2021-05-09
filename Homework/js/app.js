@@ -1,16 +1,27 @@
 let userTable = document.querySelector(".user-table");
 let loader = true;
 let popup = document.querySelector(".popup");
+let popup_user = document.querySelector(".popup-user");
 let modal = document.querySelector(".popup .user-table-modal");
 let searchInput = document.querySelector("#search");
 let icon = document.querySelector(".cursor i");
 let filterByLoan = document.querySelector("input[name='checkbox']")
+let firstnameInput = document.querySelector("input[name='firstname']")
+let lastnameInput = document.querySelector("input[name='lastname']")
+let salaryInput = document.querySelector("input[name='salary']")
+let addBtn = document.querySelector(".addBtn");
 
 // ____________________________________________________________________________________
 
 
 const users = [];
 let newArr = [];
+let initialUser = {
+    name: "",
+    surname: "",
+    img: "",
+    salary: {value: 0, currency: "AZN"}
+}
 
 
 const closePopup = () => {
@@ -25,7 +36,6 @@ const Main = async () => {
   let response = await fetch("./js/data.json");
   let fetched = await response.json();
   let isClosed = false;
-
 
   filterByLoan.addEventListener("click", (e)=> {
 
@@ -60,15 +70,6 @@ const Main = async () => {
                   <td><button type="button" data-id="${key}" class="btn btn-success detailBtn">Show Details</button></td>
               </tr>
           `;
-      
-          document.querySelector(".cursor .fa-sort-alpha-down").addEventListener("click", ()=> {
-              if(icon.classList.contains("fa-sort-alpha-down")){
-                  sortedList()
-                  icon.remove()
-                  // icon.classList.add("fa-sort-alpha-up")
-              }
-          })
-      
       
           document.querySelectorAll(".detailBtn").forEach((userBtn, index) => {
             userBtn.addEventListener("click", () => {
@@ -105,15 +106,6 @@ const Main = async () => {
         </tr>
     `;
 
-    document.querySelector(".cursor .fa-sort-alpha-down").addEventListener("click", ()=> {
-        if(icon.classList.contains("fa-sort-alpha-down")){
-            sortedList()
-            icon.remove()
-            // icon.classList.add("fa-sort-alpha-up")
-        }
-    })
-
-
     document.querySelectorAll(".detailBtn").forEach((userBtn, index) => {
       userBtn.addEventListener("click", () => {
         popup.style.visibility = "visible";
@@ -140,42 +132,6 @@ const Main = async () => {
 };
 
 
-const sortedList = ()=> {
-    users.sort(function(a, b){
-      if(a.name < b.name) { return -1; }
-  })
-
-    userTable.innerHTML = ``;
-
-    users.forEach((item, key)=> {
-        userTable.innerHTML += `
-            <tr>
-            <td>
-                <figure>
-                    <img src="${item.img}" alt="Image" width=50>
-                </figure>
-            </td>
-            <td>${item.name}</td>
-            <td>${item.surname}</td>
-            <td>${item.salary.value + " " + item.salary.currency}</td>
-            <td>${isActiveLoan(item)}</td>
-            <td>${totalPay(item)}</td>
-            <td>${checkPercent(item)}</td>
-            <td><button type="button" class="btn btn-success detailBtn">Show Details</button></td>
-        </tr>
-           `;
-
-           document.querySelectorAll(".detailBtn").forEach((userBtn, index) => {
-            userBtn.addEventListener("click", () => {
-              popup.style.visibility = "visible";
-              popup.style.opacity = "1";
-              popup.style.transition = "all 0.5s";
-              modal.classList.add("animate__fadeInDown");
-              modalTable(index)
-            });
-          });
-    })
-}
 
 const checkPercent = (item)=> {
     let calc = 0;
@@ -221,8 +177,6 @@ const isActiveLoan = (item) => {
 }
 
 const filterActive = ()=> {
-   
-    // if(filterByLoan.classList.contains("checked")){
         users.forEach((item, key)=> {
             let isActive = false;
             for (let i = 0; i < item.loans.length; i++) {
@@ -233,7 +187,6 @@ const filterActive = ()=> {
             }
             document.querySelectorAll(".trow-main").forEach(trow=>trow.classList.add("d-none"));
             newArr.forEach(item=>{
-            // document.querySelector(".error-message").classList.add("d-none");
             return document.querySelector(`.trow-${item.name}`).classList.remove("d-none");
             })
 
@@ -241,8 +194,6 @@ const filterActive = ()=> {
                 newArr.pop(item)
             }
        })
-    // }
-   
 }
 
 const searchForName = ()=> {

@@ -18,6 +18,10 @@
     }
 }
 
+.popup-user {
+    @extend .popup;
+}
+
 .btn:focus{
     box-shadow: none;
 }
