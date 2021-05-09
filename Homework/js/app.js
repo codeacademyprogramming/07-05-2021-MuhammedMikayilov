@@ -10,6 +10,8 @@ let filterByLoan = document.querySelector("input[name='checkbox']")
 
 
 const users = [];
+let newArr = [];
+
 
 const closePopup = () => {
   popup.style.visibility = "hidden";
@@ -38,11 +40,12 @@ const Main = async () => {
         filterActive()
       }
       else {
+        userTable.innerHTML = ""
         fetched.forEach((item, key) => {
             users.push(item)
           //   checkPercent(item)
             userTable.innerHTML += `
-              <tr>
+              <tr class="trow-main trow-${item.name}">
                   <td>
                       <figure>
                           <img src="${item.img}" alt="Image" width=50>
@@ -181,11 +184,8 @@ const checkPercent = (item)=> {
     calc = item.salary.value * 45 / 100;
     
     for (let i = 0; i < item.loans.length; i++) {
-        console.log("Item: ", item.name +  " 1- " + item.loans[i].perMonth.value);
         result += item.loans[i].perMonth.value
     }
-
-    console.log("Res: ", result, " Calc: ", calc);
 
     if(result > calc){
         return "No"
@@ -202,7 +202,6 @@ const totalPay = (item)=> {
     calc = item.salary.value * 45 / 100;
     
     for (let i = 0; i < item.loans.length; i++) {
-        console.log("I: ", item.name +  " - " + item.loans[i].perMonth.value);
         result += item.loans[i].perMonth.value
     }
 
@@ -222,30 +221,28 @@ const isActiveLoan = (item) => {
 }
 
 const filterActive = ()=> {
-   users.forEach((item, key)=> {
-    console.log("itemmmm: ", item);
-    let newArr = [];
+   
+    // if(filterByLoan.classList.contains("checked")){
+        users.forEach((item, key)=> {
+            let isActive = false;
+            for (let i = 0; i < item.loans.length; i++) {
+                if(!item.loans[i].closed) {
+                    isActive = true;
+                    newArr.push(item)
+                }
+            }
+            document.querySelectorAll(".trow-main").forEach(trow=>trow.classList.add("d-none"));
+            newArr.forEach(item=>{
+            // document.querySelector(".error-message").classList.add("d-none");
+            return document.querySelector(`.trow-${item.name}`).classList.remove("d-none");
+            })
 
-    item.loans.forEach((loan, ind)=>{
-        if(loan.closed){
-            console.log("tr");
-            userTable.innerHTML = ""
-            newArr.push(item)
-            console.log(newArr);
-        }
-    })
-   })
-}
-
-const sortedListZtoA = ()=> {
-    users.sort(function(a, b){
-      if(a.name < b.name) { return 1; }
-      if(a.name > b.name) { return -1; }
-      return 0;
-  })
-
-  console.log("us", users);
-    userTable.innerHTML = ``;
+            if(!filterByLoan.classList.contains("checked")){
+                newArr.pop(item)
+            }
+       })
+    // }
+   
 }
 
 const searchForName = ()=> {
@@ -253,15 +250,12 @@ const searchForName = ()=> {
         e.preventDefault();
         let userSearched = [];
         document.querySelectorAll(".trow-main").forEach(trow=>trow.classList.add("d-none"))
+        document.querySelector(".error-message").classList.remove("d-none");
+
         users.map((item, key)=> {
-            // document.querySelectorAll(".trow-main").forEach(trow=>trow.style.display = "none")
-            // if(item.name.includes(searchInput.value) || item.surname.includes(searchInput.value)){
-            //    return document.querySelectorAll(`.trow-${item.name}`).forEach(tname=>tname.style.display="block")
-            // }
-            
-            if(item.name.includes(searchInput.value) || item.surname.includes(searchInput.value)){
-                console.log(document.querySelector(`.trow-${item.name}`).classList);
+            if(item.name.toLowerCase().includes(searchInput.value.toLowerCase()) || item.surname.toLowerCase().includes(searchInput.value.toLowerCase())){
                 document.querySelector(`.trow-${item.name}`).classList.add("w-100")
+            document.querySelector(".error-message").classList.remove("d-none");
                 return document.querySelector(`.trow-${item.name}`).classList.remove("d-none");
             }
         })
@@ -269,8 +263,6 @@ const searchForName = ()=> {
 }
 
 const modalTable = (key)=>{
-    console.log("ke", key);
-    console.log("key: ", users[key].surname);
     users[key].loans.forEach((elem, index)=> {
         document.querySelector(".image-user").setAttribute("src", `${users[key].img}`)
         document.querySelector(".name-surname").innerHTML = `${users[key].name + " " + users[key].surname}`

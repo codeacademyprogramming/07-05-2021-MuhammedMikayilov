@@ -88,7 +88,7 @@
     "loans": [
       {
         "amount": { "value": 24000, "currency": "AZN" },
-        "closed": true,
+        "closed": false,
         "loaner": "DreamFin",
         "period": { "type": "month", "value": 24 },
         "perMonth": { "value": 1000, "currency": "AZN" },
@@ -118,7 +118,7 @@
         "interestRate": 17
       }
     ],
-    "salary": { "value": 4300, "currency": "AZN" },
+    "salary": { "value": 5500, "currency": "AZN" },
     "surname": "Mikayilov",
     "hasSalaryCard": true,
     "hasLoanHistory": true
